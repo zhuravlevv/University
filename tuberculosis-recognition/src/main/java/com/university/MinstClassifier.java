@@ -101,7 +101,7 @@ public class MinstClassifier {
                 .layer(new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
                         .nIn(50).nOut(N_OUTCOMES).activation(Activation.SOFTMAX)
                         .weightInit(WeightInit.XAVIER).build())
-                .backprop(true)
+//                .backprop(true)
                 .build();
 
         MultiLayerNetwork model = new MultiLayerNetwork(conf);
@@ -138,8 +138,8 @@ public class MinstClassifier {
             ImagePreProcessingScaler scaler = new ImagePreProcessingScaler(0,1); //translate image into seq of 0..1 input values
 
 //            INDArray input = Nd4j.create(new int[]{1+1, HEIGHT*WIDTH});
-            INDArray input = Nd4j.create(new int[]{1+1, HEIGHT*WIDTH*3});
-            INDArray output = Nd4j.create(new int[]{1+1, N_OUTCOMES});
+            INDArray input = Nd4j.create(1+1, HEIGHT*WIDTH*3);
+            INDArray output = Nd4j.create(1+1, N_OUTCOMES);
 
             int n = 0;
             for (int j = 1*i; j < 1*i + 1; j++) {

@@ -19,12 +19,12 @@ public class DrawingPanel extends JPanel {
     /**
      * 1,2,3,4
      */
-//    public static int y;
+    public static int y;
 
     /**
      * 5
      */
-    public static int y = 150;
+//    public static int y = 150;
 
     private ColumnModel model;
 

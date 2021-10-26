@@ -14,6 +14,7 @@ public class FilterImage extends JFrame{
     private String imageName;
     private Double percentNoise;
     private BufferedImage bufImage = null;
+    private BufferedImage tmpImage = null;
     private Random rnd = new Random();
     private Integer sizeX;
     private Integer sizeY;
@@ -44,7 +45,7 @@ public class FilterImage extends JFrame{
         l1.setIcon(new ImageIcon(resize(noisedImage,l1)));
         JLabel l2 = new JLabel();
         l2.setSize(800,800);
-        l2.setIcon(new ImageIcon(resize(bufImage,l2)));
+        l2.setIcon(new ImageIcon(resize(tmpImage,l2)));
         JPanel p = new JPanel();
         p.setLayout (new FlowLayout());
         p.add(l1);
@@ -63,17 +64,65 @@ public class FilterImage extends JFrame{
             bufImage = ImageIO.read(new File(imageName));
             Integer height = bufImage.getHeight();
             Integer width = bufImage.getWidth();
+
+            tmpImage = new BufferedImage(width + sizeY + 1,height + sizeX + 1,BufferedImage.TYPE_INT_ARGB);
+            Color black = new Color(33, 32, 255);
+
+            int heightTmp = tmpImage.getHeight();
+            int widthTmp = tmpImage.getWidth();
+            //заполняем края по y до середины в лево
+            for (int i = 0; i < widthTmp / 2; i++) {
+                for (int j = 0; j < sizeX / 2 + 1; j++) {
+                    tmpImage.setRGB(i, j, bufImage.getRGB(i, j));
+//                    tmpImage.setRGB(i, j, black.getRGB());
+                    tmpImage.setRGB( i,(heightTmp-1) - j, bufImage.getRGB(i, (height-1) - j));
+//                    tmpImage.setRGB( i,(heightTmp-1) - j, black.getRGB());
+                }
+            }
+            for (int i = widthTmp - 1, bufI = width - 1; i >= widthTmp/2; i--, bufI--) {
+                for (int j = 0; j < sizeX / 2 + 1; j++) {
+                    tmpImage.setRGB(i, j, bufImage.getRGB(bufI, j));
+//                    tmpImage.setRGB(i, j, black.getRGB());
+                    tmpImage.setRGB(i, (heightTmp-1) - j, bufImage.getRGB(bufI, (height-1) - j));
+//                    tmpImage.setRGB(i, (heightTmp-1) - j, black.getRGB());
+                }
+            }
+
+            //края по x
+            for (int i = 0; i < heightTmp / 2; i++) {
+                for (int j = 0; j < sizeY / 2 + 1; j++) {
+                    tmpImage.setRGB(j, i, bufImage.getRGB(j, i));
+//                    tmpImage.setRGB(j, i,black.getRGB());
+                    tmpImage.setRGB((widthTmp-1) - j, i, bufImage.getRGB((width-1) - j, i));
+//                    tmpImage.setRGB((widthTmp-1) - j, i, black.getRGB());
+                }
+            }
+            for (int i = heightTmp - 1, bufI = height - 1; i >= heightTmp/2; i--, bufI--) {
+                for (int j = 0; j < sizeY / 2 + 1; j++) {
+                    tmpImage.setRGB(j, i, bufImage.getRGB(j, bufI));
+//                    tmpImage.setRGB(j, i, black.getRGB());
+                    tmpImage.setRGB((widthTmp-1) - j, i, bufImage.getRGB((width-1) - j, bufI));
+//                    tmpImage.setRGB((widthTmp-1) - j, i, black.getRGB());
+                }
+            }
+
+
             Color white = new Color(255, 255, 255);
             noisedImage = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
-                    if (rnd.nextDouble() < percentNoise) {
+                    if (rnd.nextDouble() < percentNoise && i > 1 && j > 1 && i < height - 1 && j < width - 1) {
                         bufImage.setRGB(j, i, white.getRGB());
                     }
                     noisedImage.setRGB(j,i, bufImage.getRGB(j,i));
                 }
             }
-
+            
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    tmpImage.setRGB(j + sizeY/2 + 1, i + sizeX/2 + 1, bufImage.getRGB(j, i));
+                }
+            }
             saveImage(folder + "\\noise.jpg", bufImage);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "You haven't selected an image", "Error", JOptionPane.OK_OPTION);
@@ -81,12 +130,18 @@ public class FilterImage extends JFrame{
     }
 
     private void processingFilter(int index) {
-        Integer height = bufImage.getHeight();
-        Integer width = bufImage.getWidth();
+//        Integer height = bufImage.getHeight();
+//        Integer width = bufImage.getWidth();
+//        for (int i = 0; i < height - sizeY; i++)
+//            for (int j = 0; j < width - sizeX; j++)
+//                bufImage.setRGB(j + ((sizeX - 1) / 2), i + ((sizeY - 1) / 2), avgColor(i, j).getRGB());
+//        saveImage(folder + "\\process"+ sizeX+ "x" + sizeY +"_" + index + ".jpg", bufImage);
+        Integer height = tmpImage.getHeight();
+        Integer width = tmpImage.getWidth();
         for (int i = 0; i < height - sizeY; i++)
             for (int j = 0; j < width - sizeX; j++)
-                bufImage.setRGB(j + ((sizeX - 1) / 2), i + ((sizeY - 1) / 2), avgColor(i, j).getRGB());
-        saveImage(folder + "\\process"+ sizeX+ "x" + sizeY +"_" + index + ".jpg", bufImage);
+                tmpImage.setRGB(j + ((sizeX - 1) / 2), i + ((sizeY - 1) / 2), avgColor(i, j).getRGB());
+        saveImage(folder + "\\process"+ sizeX+ "x" + sizeY +"_" + index + ".jpg", tmpImage);
     }
     public BufferedImage resize(BufferedImage img, JLabel panel){
         Image tmp = img.getScaledInstance(panel.getWidth(), panel.getHeight(), Image.SCALE_SMOOTH);
@@ -98,13 +153,48 @@ public class FilterImage extends JFrame{
         return img;
     }
 
+    private Color avgColorWidth(int row, int col) {
+        ArrayList<Integer> r = new ArrayList<>();
+        ArrayList<Integer> g = new ArrayList<>();
+        ArrayList<Integer> b = new ArrayList<>();
+        for (int i = row; i < row + sizeY; i++){
+            Color c = new Color(bufImage.getRGB(col, i));
+            r.add(c.getRed());
+            b.add(c.getBlue());
+            g.add(c.getGreen());
+        }
+        Collections.sort(r);
+        Collections.sort(g);
+        Collections.sort(b);
+        int size = sizeX * sizeY;
+        return new Color(r.get((size - 1) / 2), g.get((size - 1) / 2), b.get((size - 1) / 2));
+    }
+
+    private Color avgColorHeight(int row, int col) {
+        ArrayList<Integer> r = new ArrayList<>();
+        ArrayList<Integer> g = new ArrayList<>();
+        ArrayList<Integer> b = new ArrayList<>();
+        for (int i = row; i < row + sizeY; i++){
+                Color c = new Color(bufImage.getRGB(col, i));
+                r.add(c.getRed());
+                b.add(c.getBlue());
+                g.add(c.getGreen());
+        }
+        Collections.sort(r);
+        Collections.sort(g);
+        Collections.sort(b);
+        int size = sizeX * sizeY;
+        return new Color(r.get((size - 1) / 2), g.get((size - 1) / 2), b.get((size - 1) / 2));
+    }
+
     private Color avgColor(int row, int col) {
         ArrayList<Integer> r = new ArrayList<>();
         ArrayList<Integer> g = new ArrayList<>();
         ArrayList<Integer> b = new ArrayList<>();
         for (int i = row; i < row + sizeY; i++)
             for (int j = col; j < col + sizeX; j++) {
-                Color c = new Color(bufImage.getRGB(j, i));
+//                Color c = new Color(bufImage.getRGB(j, i));
+                Color c = new Color(tmpImage.getRGB(j, i));
                 r.add(c.getRed());
                 b.add(c.getBlue());
                 g.add(c.getGreen());
@@ -126,11 +216,11 @@ public class FilterImage extends JFrame{
     static  String folder ="";
     public static void main(String[] args) {
         JFrame mainWindow = new JFrame();
-        mainWindow.setSize(450,120);
+        mainWindow.setSize(900,240);
         mainWindow.setTitle("Filter Image");
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new FlowLayout());
-        JTextField textField = new JTextField("D:\\lab1\\13.jpg",20);
+        JTextField textField = new JTextField("/home/vladislav/Downloads/popugaj.jpg",20);
         folder = "D:\\lab1";
         textField.setEnabled(false);
         JButton load = new JButton("Load image");
