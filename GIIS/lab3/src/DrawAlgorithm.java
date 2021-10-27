@@ -119,13 +119,15 @@ public class DrawAlgorithm extends JFrame {
         int x, y, dx, dy, incx, incy, pdx, pdy, es, el, err;
         dx = start.x - end.x;
         dy = start.y - end.y;
-        incx = (dx > 0) ? 1 : (dx < 0) ? -1 : 0;
-        incy = (dy > 0) ? 1 : (dy < 0) ? -1 : 0;
+        incx = Integer.compare(dx, 0);
+        incy = Integer.compare(dy, 0);
         if (dx < 0)
             dx = Math.abs(dx);
         if (dy < 0)
             dy = Math.abs(dy);
 
+        //el - большее
+        //es - меньшее
         if (dx > dy) {
             pdx = incx;
             pdy = 0;
@@ -146,7 +148,7 @@ public class DrawAlgorithm extends JFrame {
         for (int t = 0; t < el; t++)//идём по всем точкам, начиная со второй и до последней
         {
             err -= es;
-            if (err < 0)
+            if (err < 0) // err > 0 если нужно сдвинуться по большему, и не сдвигаться по меньшему (из dx, dy)
             {
                 err += el;
                 x -= incx;//сдвинуть прямую (сместить вверх или вниз, если цикл проходит по иксам)
@@ -171,14 +173,10 @@ public class DrawAlgorithm extends JFrame {
         int delta = 1 - 2 * radius;
         int error;
         while(y >= 0) {
-            if(center.x + x > pointOffset.x && center.y+y > pointOffset.y)
-                points.add(new Point(center.x + x,center.y + y));
-            if(center.x + x > pointOffset.x && center.y-y > pointOffset.y)
-                points.add(new Point(center.x + x,center.y - y));
-            if(center.x - x > pointOffset.x && center.y+y > pointOffset.y)
-                points.add(new Point(center.x - x,center.y + y));
-            if(center.x - x > pointOffset.x && center.y-y > pointOffset.y)
-                points.add(new Point(center.x - x,center.y - y));
+            points.add(new Point(center.x + x,center.y + y));
+            points.add(new Point(center.x + x,center.y - y));
+            points.add(new Point(center.x - x,center.y + y));
+            points.add(new Point(center.x - x,center.y - y));
             error = 2 * (delta + y) - 1;
             if(delta < 0 && error <= 0) {
                 ++x;
