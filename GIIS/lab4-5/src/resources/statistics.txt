@@ -1,4 +1,4 @@
 Statistics:
-Games played: 4 -> Win: 2
-Games played with numbers: 3 -> Win: 1
-Games played with image: 1 -> Win: 1
+Games played: 8 -> Win: 2
+Games played with numbers: 6 -> Win: 1
+Games played with image: 2 -> Win: 1
