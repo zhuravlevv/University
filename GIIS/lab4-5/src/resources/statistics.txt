@@ -1,0 +1,4 @@
+Statistics:
+Games played: 4 -> Win: 2
+Games played with numbers: 3 -> Win: 1
+Games played with image: 1 -> Win: 1
