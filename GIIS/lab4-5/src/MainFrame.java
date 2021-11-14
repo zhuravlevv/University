@@ -29,7 +29,7 @@ public class MainFrame extends JFrame{
     public MainFrame(){
         setJMenuBar(createMenu());
         loadStatistics();
-        imageSrc = "/home/vladislav/IdeaProjects/University/GIIS/lab4-5/src/resources/";
+        imageSrc = "/home/vladislav/IdeaProjects/University/GIIS/lab4-5/src/resources/image.jpg";
         mode = "numbers";
         win = false;
         win2 = true;

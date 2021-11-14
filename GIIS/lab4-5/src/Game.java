@@ -82,8 +82,8 @@ public class Game extends JPanel {
                 for (int j = 0; j < sizeGame; j++) {
                     sq = new JLabel();
                     images[i][j] = new BufferedImage(width,height, BufferedImage.TYPE_INT_ARGB);
-                    for (int k = 0 + i*height,q = 0; k < height + i*height; k++,q++) {
-                        for (int l = 0 + j*width,w = 0; l < width + j*width; l++,w++) {
+                    for (int k = i*height,q = 0; k < height + i*height; k++,q++) {
+                        for (int l = j*width,w = 0; l < width + j*width; l++,w++) {
                             if(i!=sizeGame-1||j!=sizeGame-1)
                                 images[i][j].setRGB(w,q,img.getRGB(l,k));
                             else
