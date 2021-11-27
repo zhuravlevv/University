@@ -19,8 +19,8 @@ public class Computer {
 
     @Override
     public String toString() {
-        return "Computer{" +
-                "motherboard=" + motherboard +
-                '}';
+        return "Computer{\n" +
+                "\tmotherboard=" + motherboard +
+                "\n}";
     }
 }

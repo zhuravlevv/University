@@ -30,8 +30,8 @@ public class RAM {
     @Override
     public String toString() {
         return "RAM{" +
-                "type='" + type + '\'' +
-                ", volume='" + volume + '\'' +
-                '}';
+                "\n\ttype='" + type + '\'' +
+                ", \n\tvolume='" + volume + '\'' +
+                "\n}";
     }
 }

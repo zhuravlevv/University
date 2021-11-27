@@ -39,9 +39,9 @@ public class GraphicsCard {
     @Override
     public String toString() {
         return "GraphicsCard{" +
-                "model='" + model + '\'' +
-                ", core='" + core + '\'' +
-                ", coreFrequency=" + coreFrequency +
-                '}';
+                "\n\tmodel='" + model + '\'' +
+                ", \n\tcore='" + core + '\'' +
+                ", \n\tcoreFrequency=" + coreFrequency +
+                "\n}";
     }
 }

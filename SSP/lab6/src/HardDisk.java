@@ -40,9 +40,9 @@ public class HardDisk {
     @Override
     public String toString() {
         return "HardDisk{" +
-                "baudRate='" + baudRate + '\'' +
-                ", gbCapacity=" + gbCapacity +
-                ", bufferMbSize=" + bufferMbSize +
-                '}';
+                "\n\tbaudRate='" + baudRate + '\'' +
+                ", \n\tgbCapacity=" + gbCapacity +
+                ", \n\tbufferMbSize=" + bufferMbSize +
+                "\n}";
     }
 }

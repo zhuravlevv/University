@@ -60,11 +60,11 @@ public class Motherboard {
     @Override
     public String toString() {
         return "Motherboard{" +
-                "socket='" + socket + '\'' +
-                ", cpu=" + cpu +
-                ", ram=" + ram +
-                ", hardDisk=" + hardDisk +
-                ", graphicsCard=" + graphicsCard +
-                '}';
+                "\n\tsocket='" + socket + '\'' +
+                ", \n\tcpu=" + cpu +
+                ", \n\tram=" + ram +
+                ", \n\thardDisk=" + hardDisk +
+                ", \n\tgraphicsCard=" + graphicsCard +
+                "\n}";
     }
 }

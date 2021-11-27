@@ -39,9 +39,9 @@ public class CPU {
     @Override
     public String toString() {
         return "CPU{" +
-                "model='" + model + '\'' +
-                ", clockFrequency=" + clockFrequency +
-                ", bitness=" + bitness +
-                '}';
+                "\n\tmodel='" + model + '\'' +
+                ", \n\tclockFrequency=" + clockFrequency +
+                ", \n\tbitness=" + bitness +
+                "\n}";
     }
 }
