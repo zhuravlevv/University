@@ -346,16 +346,16 @@ public class TrolleybusParkForm extends JFrame {
                         }
                         if (index.equals(-1)) {
                             database.addNote("routes", new Object[]{
+                                    drivers.get(driver.getSelectedItem()),
                                     description.getText(),
                                     trolleybuses.get(trolleybus.getSelectedItem().toString()),
-                                    drivers.get(driver.getSelectedItem()),
                                     date.getText()
                             });
                         } else {
                             database.updateNote("routes", new Object[]{
-                                    description.getText(),
                                     trolleybuses.get(trolleybus.getSelectedItem().toString()),
                                     drivers.get(driver.getSelectedItem()),
+                                    description.getText(),
                                     date.getText()
                             }, index);
                         }
