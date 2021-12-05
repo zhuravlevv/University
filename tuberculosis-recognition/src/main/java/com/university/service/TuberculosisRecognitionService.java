@@ -1,24 +1,35 @@
 package com.university.service;
 
+import org.apache.commons.io.FileUtils;
 import org.datavec.image.loader.NativeImageLoader;
 import org.deeplearning4j.nn.graph.ComputationGraph;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
 import org.nd4j.linalg.dataset.api.preprocessor.VGG16ImagePreProcessor;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.InputStream;
 
 @Service
 public class TuberculosisRecognitionService {
 
     private final ComputationGraph preTrainedNet;
+    private ResourceLoader resourceLoader;
 
-    public TuberculosisRecognitionService() {
+    public TuberculosisRecognitionService(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
         try {
+//            File file = resourceLoader.getClassLoader().getResourceAsStream("classpath:normal/normal-1.jpeg");
+//            System.out.println("FILE PATH - " + file.getAbsolutePath());
+            InputStream inputStream = this.resourceLoader.getClassLoader().getResourceAsStream("tuber_modelIteration_200_epoch_2.zip");
+            File targetFile = new File("tuber-recon.zip");
+            FileUtils.copyInputStreamToFile(inputStream, targetFile);
             preTrainedNet = ModelSerializer
-                    .restoreComputationGraph(ResourceUtils.getFile("classpath:tuber_modelIteration_200_epoch_2.zip"), true);
+                    .restoreComputationGraph(targetFile, true);
             preTrainedNet.init();
         } catch (Exception e) {
             e.printStackTrace();
@@ -38,6 +49,8 @@ public class TuberculosisRecognitionService {
 //            System.out.println("Normal - " + output.getDouble(0));
 //            System.out.println("Tuberculosis - " + output.getDouble(1));
 
+            System.out.println("Result normal - " + output.getDouble(0));
+            System.out.println("Result tuberculosis - " + output.getDouble(1));
             return output.getDouble(0) > output.getDouble(1)
                     ? "Normal"
                     : "Tuberculosis";
