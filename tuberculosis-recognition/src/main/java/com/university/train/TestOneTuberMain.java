@@ -1,4 +1,4 @@
-package com.university.service;
+package com.university.train;
 
 //import org.datavec.api.split.FileSplit;
 //import org.datavec.api.split.InputSplit;
