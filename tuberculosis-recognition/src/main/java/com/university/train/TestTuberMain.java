@@ -23,7 +23,7 @@ public class TestTuberMain {
             File trainData = new File(trainFolder);
             FileSplit train = new FileSplit(trainData, NativeImageLoader.ALLOWED_FORMATS, RAND_NUM_GEN);
 
-            InputSplit[] sample = train.sample(PATH_FILTER, 35, 35);
+            InputSplit[] sample = train.sample(PATH_FILTER, 70, 70);
 
             DataSetIterator devIterator = getDataSetIterator(sample[1]);
 
