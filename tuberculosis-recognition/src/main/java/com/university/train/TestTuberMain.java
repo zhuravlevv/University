@@ -19,11 +19,13 @@ public class TestTuberMain {
         try {
             ComputationGraph preTrainedNet = ModelSerializer
                     .restoreComputationGraph(new File("/home/vladislav/IdeaProjects/University/tuberculosis-recognition/src/main/resources/tuber_modelIteration_200_epoch_2.zip"), true);
-            String trainFolder = "/home/vladislav/IdeaProjects/University/tuberculosis-recognition/src/main/resources/test_tuber";
+            String trainFolder = "/home/vladislav/IdeaProjects/University/tuberculosis-recognition/src/main/resources/train_tuber";
             File trainData = new File(trainFolder);
             FileSplit train = new FileSplit(trainData, NativeImageLoader.ALLOWED_FORMATS, RAND_NUM_GEN);
 
-            InputSplit[] sample = train.sample(PATH_FILTER, 70, 70);
+            //1 число - часть на тренировку
+            //2 число - часть на тесты
+            InputSplit[] sample = train.sample(PATH_FILTER, 0, 2);
 
             DataSetIterator devIterator = getDataSetIterator(sample[1]);
 
