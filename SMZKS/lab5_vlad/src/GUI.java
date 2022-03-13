@@ -9,7 +9,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class FootballGUI implements Runnable {
+public class GUI implements Runnable {
 
     private DefaultTableModel model;
     private JFrame frame;
@@ -24,10 +24,10 @@ public class FootballGUI implements Runnable {
 
     // Launch the application.
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new FootballGUI());
+        SwingUtilities.invokeLater(new GUI());
     }
 
-    public FootballGUI() {
+    public GUI() {
         String[] columnNames = {" Name", " Value "};
         this.model = new DefaultTableModel();
 
