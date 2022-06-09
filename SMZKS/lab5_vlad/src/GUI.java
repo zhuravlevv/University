@@ -20,7 +20,7 @@ public class GUI implements Runnable {
     private JTextField textFieldC = new JTextField();
     private JTextField textFieldD = new JTextField();
 
-    static MainInterface main = new Main2();
+    static MainInterface main = new Main1();
 
     // Launch the application.
     public static void main(String[] args) {
